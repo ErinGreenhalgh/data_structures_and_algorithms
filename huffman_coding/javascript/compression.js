@@ -75,11 +75,50 @@ Encoder.prototype.characterToCode = function(character) {
   return this.root.encoderObject()[character];
 }
 
+/// my code //////////////////////////////////////////////
 Encoder.prototype.decode = function(compressedBitstring) {
-
-  // TODO: All the awesome
-
+  let index = 0
+  let currentNode = this.root;
+  let bits = compressedBitstring.split("");
+  let characters = [];
+  traverseTree.call(this, index, currentNode, bits, characters);
+  return characters.join("");
 }
+
+function traverseTree(index, currentNode, bits, characters) {
+  if (index <= bits.length + 1) {
+    if (currentNode instanceof Leaf) {
+      addCharacterAndStartTraverseOver.call(this, index, currentNode, bits, characters)
+    } else {
+      if (bits[index] === "0") {
+        traverseLeft.call(this, index, currentNode, bits, characters);
+      }
+      if (bits[index] === "1") {
+        traverseRight.call(this, index, currentNode, bits, characters);
+      }
+    }
+  } else {
+    return characters
+  }
+}
+
+function addCharacterAndStartTraverseOver(index, currentNode, bits, characters){
+  characters.push(currentNode.character);
+  currentNode = this.root;
+  traverseTree.call(this, index, currentNode, bits, characters);
+}
+
+function traverseLeft(index, currentNode, bits, characters) {
+  currentNode = currentNode.left;
+  traverseTree.call(this, index + 1, currentNode, bits, characters);
+}
+
+function traverseRight(index, currentNode, bits, characters) {
+  currentNode = currentNode.right;
+  traverseTree.call(this, index + 1, currentNode, bits, characters);
+}
+
+
 
 ///////////////////////////////////
 //// ><((((‘> DECODER <`))))>< ////
@@ -90,6 +129,10 @@ function Decoder(compressedBitstring, rootNode) {
 }
 
 Decoder.prototype.message = function(){
- // TODO: It
- // YOU CAN DO IT!!
+  let index = 0;
+  let currentNode = this.root;
+  let bits = this.bitstring.split("");
+  let characters = [];
+  traverseTree.call(this, index, currentNode, bits, characters);
+  return characters.join("");
 }
